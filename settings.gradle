@@ -1,0 +1,1 @@
+include ':app', ':injectjs4android'
