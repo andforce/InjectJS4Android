@@ -1,16 +1,13 @@
 package org.zarroboogs.injectjs;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.http.Header;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
@@ -21,7 +18,7 @@ import android.webkit.WebView;
 public class InjectJS {
 
 	private WebView mWebView;
-    private AsyncHttpClient mAsyncHttpClient = new AsyncHttpClient();
+    private OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mInjectedString;
     private OnLoadListener mListener;
     private String mJSCallJavaFunction = "";
@@ -74,7 +71,7 @@ public class InjectJS {
 	/**
 	 * window.JSINTERFACE.saveAccountInfo(loginName.value, loginPassword.value);
 	 * @param obj
-	 * @param js
+	 * @param callParams
 	 */
 	public void addJSCallJavaInterface(JSCallJavaInterface obj, String... callParams){
 		mJSCallJavaFunction = buildJSCallJava(callParams);
@@ -134,31 +131,32 @@ public class InjectJS {
 	public void injectUrl(final String url, String js, final String encode){
 		jsStr = js;
 		jsStr = jsStr.replace("</script>", mJSCallJavaFunction + "</script>");
-		mAsyncHttpClient.get(url, new AsyncHttpResponseHandler() {
-			
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				// TODO Auto-generated method stub
-				try {
-					String response = new String(arg2, encode);
-					mInjectedString = response.replace("</head>", jsStr + "\n</head>");
-					for (KeyValue remove : mReplaceList) {
-						mInjectedString = mInjectedString.replace(remove.getKey(), remove.getValue());
-					}
 
-					mWebView.loadDataWithBaseURL(url, mInjectedString, "text/html", "UTF-8", "");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+        Request request = new Request.Builder().url(url).build();
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                String responseStr = new String(response.body().bytes(), "GBK");
+
+                mInjectedString = responseStr.replace("</head>", jsStr + "\n</head>");
+                for (KeyValue remove : mReplaceList) {
+                    mInjectedString = mInjectedString.replace(remove.getKey(), remove.getValue());
+                }
+
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadDataWithBaseURL(url, mInjectedString, "text/html", "UTF-8", "");
+                    }
+                });
+            }
+        });
+
 	}
 	
 	class InjectWebChromeClient extends WebChromeClient{
