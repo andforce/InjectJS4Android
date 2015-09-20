@@ -11,6 +11,7 @@ import com.squareup.okhttp.Response;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
@@ -143,6 +144,7 @@ public class InjectJS {
             public void onResponse(Response response) throws IOException {
                 String responseStr = new String(response.body().bytes(), "GBK");
 
+                Log.d("responseStr",responseStr);
                 mInjectedString = responseStr.replace("</head>", jsStr + "\n</head>");
                 for (KeyValue remove : mReplaceList) {
                     mInjectedString = mInjectedString.replace(remove.getKey(), remove.getValue());
