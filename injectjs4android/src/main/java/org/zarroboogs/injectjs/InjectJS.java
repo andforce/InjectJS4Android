@@ -1,19 +1,19 @@
 package org.zarroboogs.injectjs;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import android.annotation.SuppressLint;
-import android.text.TextUtils;
-import android.util.Log;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("JavascriptInterface")
 public class InjectJS {
@@ -92,7 +92,7 @@ public class InjectJS {
 				sb.append(callParams[i] + "+\"#&=&#\"+");
 			}
 		}
-		String function = "\n" + 
+		String function = "\n" +
 			"    function jsCallJavaFunction() {									\n" + 
 	        "		window.JS_CALL_JAVA.jsCallJava(" + sb.toString() +");			\n" + 
 	    	"    }																	\n";
@@ -161,7 +161,7 @@ public class InjectJS {
 
 	}
 	
-	class InjectWebChromeClient extends WebChromeClient{
+	class InjectWebChromeClient extends WebChromeClient {
 		@Override
 		public void onProgressChanged(WebView view, int newProgress) {
 			// TODO Auto-generated method stub

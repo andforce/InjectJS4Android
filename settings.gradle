@@ -1,1 +1,3 @@
-include ':app', ':injectjs4android'
+include ':injectjs4android'
+include ':app'
+rootProject.name = "InjectJS4Android"

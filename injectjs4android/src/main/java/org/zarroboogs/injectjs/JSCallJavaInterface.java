@@ -2,7 +2,7 @@ package org.zarroboogs.injectjs;
 
 import android.webkit.JavascriptInterface;
 
-public abstract class JSCallJavaInterface extends Object{
+public abstract class JSCallJavaInterface extends Object {
 
 	public JSCallJavaInterface() {
 		super();

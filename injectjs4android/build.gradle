@@ -1,39 +1,55 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-    useLibrary  'org.apache.http.legacy'
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
 }
 
-ext {
-    PUBLISH_GROUP_ID = 'com.andforce.injectjs'  // 填写groupId， 一般是包名，比如：com.android.support
-    //PUBLISH_ARTIFACT_ID = '你的aritfactId'  // //这里不需要再填写，自动以Model的名字作为aritfactId
-    PUBLISH_VERSION = '0.0.9'   // 版本号，比如：22.2.1
-    PUBLISH_DES = 'Inject JS for Android'   // 库的描述尽量不要用中文
-    LIB_NAME = 'InjectJS4Android'    // lib名称，比如：My_Lib
-
-    WEBSITE_URL = 'https://github.com/andforce/InjectJS4Android'  // 可以填写github上的库地址.
-    ISSUE_TRACKER_URL = 'https://github.com/andforce/InjectJS4Android/issues' // 可以填写github库的issue地址.
-    VSC_URL = 'https://github.com/andforce/InjectJS4Android'    // 可以填写github上库的地址.
-}
-
-// 下面这行请勿修改
-apply from: 'https://raw.githubusercontent.com/andforce/release-android-lib-to-jcenter/master/bintray.gradle'
+//ext {
+//    PUBLISH_GROUP_ID = 'com.andforce.injectjs'  // 填写groupId， 一般是包名，比如：com.android.support
+//    //PUBLISH_ARTIFACT_ID = '你的aritfactId'  // //这里不需要再填写，自动以Model的名字作为aritfactId
+//    PUBLISH_VERSION = '0.0.9'   // 版本号，比如：22.2.1
+//    PUBLISH_DES = 'Inject JS for Android'   // 库的描述尽量不要用中文
+//    LIB_NAME = 'InjectJS4Android'    // lib名称，比如：My_Lib
+//
+//    WEBSITE_URL = 'https://github.com/andforce/InjectJS4Android'  // 可以填写github上的库地址.
+//    ISSUE_TRACKER_URL = 'https://github.com/andforce/InjectJS4Android/issues' // 可以填写github库的issue地址.
+//    VSC_URL = 'https://github.com/andforce/InjectJS4Android'    // 可以填写github上库的地址.
+//}
+//
+//// 下面这行请勿修改
+//apply from: 'https://raw.githubusercontent.com/andforce/release-android-lib-to-jcenter/master/bintray.gradle'
